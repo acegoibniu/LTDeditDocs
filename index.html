@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dedit Shortcuts Reference</title>
+    <style>
+        :root {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-header: #334155;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --border: #334155;
+            --kbd-bg: #f8fafc;
+            --kbd-text: #0f172a;
+            --kbd-border: #cbd5e1;
+        }
+		
+		/* Light Mode Overrides */
+        [data-theme="light"] {
+            --bg-body: #f8fafc;       /* Very light slate */
+            --bg-card: #ffffff;       /* White cards */
+            --bg-header: #e2e8f0;     /* Light gray header background */
+            --text-main: #0f172a;     /* Dark slate text */
+            --text-muted: #64748b;    /* Muted text */
+            --accent: #0284c7;        /* Darker blue for better contrast on white */
+            --border: #cbd5e1;        /* Light gray borders */
+            --kbd-bg: #f1f5f9;
+            --kbd-text: #334155;
+            --kbd-border: #94a3b8;
+        }
+
+        /* Style for the Theme Toggle Button */
+        #theme-toggle {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            margin-bottom: 5px; /* Spacing before search bar */
+        }
+        
+        #theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        /* Layout Container */
+        .container {
+            max-width: 1400px; /* Wider to accommodate side-by-side */
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Flex Wrapper for Side-by-Side Layout */
+        .layout-wrapper {
+            display: flex;
+            gap: 40px;
+            align-items: start; /* Critical for sticky sidebar */
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            position: sticky; /* Sidebar should always be visible despite scrolling */
+            top: 20px;
+            height: fit-content;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+
+        header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .dedit-logo {
+            width: 120px; 
+            height: 120px;
+			display: none;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.3));
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin: 0 0 0.5rem 0;
+            background: linear-gradient(90deg, var(--accent), #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Controls / Filter Bar (Vertical Stack in Sidebar) */
+        .controls {
+            background-color: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        select, input {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent);
+        }
+
+        /* Data Table/Grid */
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1px;
+            background-color: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid-header {
+            display: grid;
+            grid-template-columns: 1.9fr 1.0fr 1.0fr 2.9fr;
+            background-color: var(--bg-header);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .grid-row {
+            display: grid;
+            grid-template-columns: 1.9fr 1.0fr 1.0fr 2.9fr;
+            background-color: var(--bg-card);
+            transition: background-color 0.2s;
+        }
+
+        .grid-row:hover {
+            background-color: #2a3850;
+        }
+
+        .cell {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .cell-keys {
+            font-family: monospace;
+            color: var(--accent);
+        }
+
+        .cell-desc {
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Tags and Keyboard styles */
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        .tag.view-tag {
+            background-color: rgba(167, 139, 250, 0.1);
+            color: #a78bfa;
+        }
+
+        kbd {
+            display: inline-block;
+            padding: 3px 6px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1;
+            color: var(--kbd-text);
+            vertical-align: middle;
+            background-color: var(--kbd-bg);
+            border: solid 1px var(--kbd-border);
+            border-bottom-color: #94a3b8;
+            border-radius: 4px;
+            box-shadow: inset 0 -1px 0 #94a3b8;
+            margin: 0 2px;
+            white-space: nowrap;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            padding: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            background-color: var(--bg-card);
+            font-style: italic;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 950px) {
+            .layout-wrapper {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 20px;
+            }
+
+            .controls {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-header { display: none; }
+            
+            .grid-row {
+                grid-template-columns: 1fr;
+                padding: 16px;
+                border-bottom: 1px solid var(--border);
+                gap: 8px;
+            }
+
+            .cell { padding: 4px 0; }
+            .cell-keys { font-size: 1.1rem; margin-bottom: 4px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="layout-wrapper">
+        
+        <aside class="sidebar">
+            <header>
+                <svg class="dedit-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dedit Logo">
+                    <defs>
+                        <linearGradient id="blueGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0000FF" />
+                            <stop offset="1" stop-color="#000080" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M 8 8 H 40 L 56 32 L 40 56 H 8 V 8 Z" fill="url(#blueGradient)" stroke="#38bdf8" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M 22 20 L 44 32 L 22 44 V 20 Z" fill="white" filter="drop-shadow(0px 2px 2px rgba(0,0,0,0.5))"/>
+                </svg>
+
+                <h1>Dedit Shortcuts</h1>
+                <div class="subtitle">LithTech Talon Engine</div>
+            </header>
+
+            <div class="controls">
+				<button id="theme-toggle" type="button">
+                    <span>☀️</span> Switch to Light Mode
+                </button>
+                <div class="control-group">
+                    <label for="search">Search</label>
+                    <input type="text" id="search" placeholder="Filter keys...">
+                </div>
+                <div class="control-group">
+                    <label for="filter-mode">Edit Mode</label>
+                    <select id="filter-mode">
+                        <option value="All">All Modes</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="filter-view">View Context</label>
+                    <select id="filter-view">
+                        <option value="All">All Views</option>
+                    </select>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="shortcut-grid" id="grid-container">
+                <div class="grid-header">
+                    <div class="cell">Keys</div>
+                    <div class="cell">Edit Mode</div>
+                    <div class="cell">View</div>
+                    <div class="cell">Description</div>
+                </div>
+                </div>
+            
+            <div style="margin-top: 20px; text-align: right; color: var(--text-muted); font-size: 0.8rem;">
+                Generated for Dedit (Talon Engine)
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    const data = [
+        { keys: "Ctrl + N", mode: "All", view: "All", desc: "New World" },
+        { keys: "Ctrl + S", mode: "All", view: "All", desc: "Save Project" },
+        { keys: "Ctrl + O", mode: "All", view: "All", desc: "Open Project" },
+        { keys: "Ctrl + P", mode: "All", view: "All", desc: "Process" },
+        { keys: "Ctrl + Alt + R", mode: "All", view: "All", desc: "Run World" },
+        { keys: "Ctrl + C", mode: "All", view: "All", desc: "Copy" },
+        { keys: "Ctrl + V", mode: "All", view: "All", desc: "Paste" },
+        { keys: "Ctrl + Alt + V", mode: "All", view: "All", desc: "Paste Alternate" },
+        { keys: "Ctrl + M", mode: "All", view: "All", desc: "Stamp" },
+        { keys: "Alt + O", mode: "All", view: "All", desc: "Add Object" },
+        { keys: "Ctrl + Alt + O", mode: "All", view: "All", desc: "Object Browser" },
+        { keys: "Ctrl + W", mode: "All", view: "All", desc: "World Info" },
+        { keys: "Ctrl + I", mode: "All", view: "All", desc: "Load Light Data" },
+        { keys: "Ctrl + Shift + I", mode: "All", view: "All", desc: "Unload Light Data" },
+        { keys: "Alt + A", mode: "All", view: "All", desc: "Advanced Selection" },
+        { keys: "Ctrl + Alt + G", mode: "All", view: "All", desc: "Group Selection i.e. create new node container and send all selections to that container" },
+        { keys: "Ctrl + 1", mode: "All", view: "All", desc: "Worlds Tab" },
+        { keys: "Ctrl + 2", mode: "All", view: "All", desc: "Textures Tab" },
+        { keys: "Ctrl + 3", mode: "All", view: "All", desc: "Nodes Tab" },
+        { keys: "Ctrl + 4", mode: "All", view: "All", desc: "Properties Tab" },
+        { keys: "Ctrl + 5", mode: "All", view: "All", desc: "Models Tab" },
+        { keys: "Ctrl + 6", mode: "All", view: "All", desc: "Sounds Tab" },
+        { keys: "Ctrl + 7", mode: "All", view: "All", desc: "Sprites Tab" },
+        { keys: "Ctrl + 8", mode: "All", view: "All", desc: "Classes Tab" },
+        { keys: "Ctrl + ]", mode: "All", view: "All", desc: "Go to Next navigator position" },
+        { keys: "Ctrl + [", mode: "All", view: "All", desc: "Go to Previous navigator position" },
+        { keys: "Shift + ]", mode: "All", view: "All", desc: "Go to Next Leak vertice" },
+        { keys: "Shift + [", mode: "All", view: "All", desc: "Go to Previous Leak vertice" },
+        { keys: "X + Mouse", mode: "All", view: "All", desc: "Move the green marker" },
+        { keys: "F6 / Shift + F6", mode: "All", view: "All", desc: "Next pane / Previous pane" },
+        { keys: "Ctrl + Y", mode: "All", view: "All", desc: "Redo" },
+        { keys: "Ctrl + Z", mode: "All", view: "All", desc: "Undo" },
+        { keys: "Ctrl + T", mode: "All", view: "All", desc: "Apply texture to selected brushes" },
+        { keys: "Ctrl + A", mode: "All", view: "All", desc: "Apply color to gridlines of selected brush" },
+        { keys: "Ctrl + Alt + M", mode: "All", view: "All", desc: "Cycle the current editing mode to the next mode" },
+        { keys: "Ctrl + H", mode: "All", view: "All", desc: "Enter object mode" },
+        { keys: "Ctrl + G", mode: "All", view: "All", desc: "Enter geometry mode" },
+        { keys: "Ctrl + B", mode: "All", view: "All", desc: "Enter brush mode" },
+        { keys: "Ctrl + L", mode: "All", view: "All", desc: "Enter Light Editing mode" },
+        { keys: "H", mode: "All", view: "All", desc: "Select and move a brush so it intersects other brushes and press H. This will carve the selected brush's shape out of the intersecting brushes." },
+        { keys: "C + Mouse", mode: "All", view: "Perspective", desc: "Hold C and move mouse to move the far clipping plane closer or farther. This is used cut down the number of polygons displayed. This is especially useful if the level you are working on is HUGE." },
+        { keys: "Z + Mouse", mode: "All", view: "All", desc: "Hold down Z and right-click drag to resize the grid" },
+        { keys: "+ / -", mode: "All", view: "All", desc: "Modifies grid spacing. First click in the view to change the spacing. Then press the + and - keys on the keypad." },
+        { keys: "B + LMB", mode: "All", view: "All", desc: "Select vertices, brushes or objects from a rectangle. Hold B and left-click and drag rectangle." },
+        { keys: "8, 9, 0", mode: "All", view: "Perspective", desc: "Pressing these keys places the grid along a principle axis (x, y, z)" },
+        { keys: "U", mode: "All", view: "All", desc: "Un-tags all selections." },
+        { keys: "O + Mouse", mode: "All", view: "Parallel", desc: "Zoom in and out" },
+        { keys: "I + Mouse", mode: "All", view: "Parallel", desc: "Move along plane of grid" },
+        { keys: "O + Mouse", mode: "All", view: "Perspective", desc: "Walkthru Move Mode: Change orientation. Orbit Move Mode: Orbit around focus" },
+        { keys: "I + Mouse", mode: "All", view: "Perspective", desc: "Walkthru Move Mode: Move along XZ plane. Orbit Move Mode: Dolly to/away from focus" },
+        { keys: "Y + A + LMB", mode: "All", view: "All", desc: "Apply texture upon click" },
+        { keys: "Ctrl + Alt + 1", mode: "Brush", view: "All", desc: "Create Box Primitive" },
+        { keys: "Ctrl + Alt + 2", mode: "Brush", view: "All", desc: "Create Cylinder Primitive" },
+        { keys: "Ctrl + Alt + 3", mode: "Brush", view: "All", desc: "Create Pyramid Primitive" },
+        { keys: "Ctrl + Alt + 4", mode: "Brush", view: "All", desc: "Create Sphere Primitive" },
+        { keys: "Ctrl + Alt + 5", mode: "Brush", view: "All", desc: "Create Dome Primitive" },
+        { keys: "Space", mode: "Brush (Draw Poly)", view: "All", desc: "Insert vertex" },
+        { keys: "Backspace", mode: "Brush (Draw Poly)", view: "All", desc: "Remove last planted vertex" },
+        { keys: "S", mode: "Brush (Draw Poly)", view: "All", desc: "Split selected brushes along the line" },
+        { keys: "R", mode: "Brush (Draw Poly)", view: "All", desc: "Rotate selected brushes along an angle made with 3 vertices" },
+        { keys: "Shift", mode: "Brush (Draw Poly)", view: "All", desc: "Snap vertex" },
+        { keys: "E", mode: "Brush (Draw Poly)", view: "All", desc: "Insert Edge on selected brush" },
+        { keys: "A + LMB", mode: "Brush", view: "All", desc: "Hold down A and click LMB over brush to apply the currently selected texture to that brush" },
+        { keys: "T + LMB", mode: "Brush", view: "All", desc: "Hold down T and click LMB over brush. Each LMB click cycles to next brush under mouse" },
+        { keys: "Ctrl + J", mode: "Brush", view: "All", desc: "Unjoin all faces of a brush" },
+        { keys: "Shift + J", mode: "Brush", view: "All", desc: "Join selected faces into a brush" },
+        { keys: "L", mode: "Brush, Geometry", view: "All", desc: "Fit textures to poly or poly strip" },
+        { keys: "Spacebar", mode: "Brush, Geometry", view: "All", desc: "Use the spacebar to create a vertex on the grid. This will start a new polygon if you're not already drawing one." },
+        { keys: "M + LMB + Mouse", mode: "Brush, Object", view: "All", desc: "Move selected brushes and objects" },
+        { keys: "Shift + M + LMB", mode: "Brush, Object", view: "All", desc: "Move selected brushes and objects along one dimension" },
+        { keys: "N", mode: "Brush, Object", view: "All", desc: "Rotate the brush" },
+        { keys: "Shift + N", mode: "Brush, Object", view: "All", desc: "Rotate the brush in 15-degree increments" },
+        { keys: "Y", mode: "Geometry", view: "All", desc: "Tag the vertices of the red polygon" },
+        { keys: "S + LMB + Mouse", mode: "Geometry", view: "All", desc: "Move all tagged vertices" },
+        { keys: "M + LMB + Mouse", mode: "Geometry", view: "All", desc: "Move the green vertex" },
+        { keys: "V", mode: "Geometry", view: "All", desc: "Moves green vertex on grid" },
+        { keys: "Shift + V", mode: "Geometry", view: "All", desc: "Moves the green vertex off grid" },
+        { keys: "Shift + E", mode: "Geometry", view: "All", desc: "Aligns the vert to an edge" },
+        { keys: "B", mode: "Geometry", view: "All", desc: "Moves tagged vertices on grid" },
+        { keys: "Shift + B", mode: "Geometry", view: "All", desc: "Moves tagged vertices off grid" },
+        { keys: "K", mode: "Geometry", view: "All", desc: "Reinitialize texture on selected brush or red polygon" },
+        { keys: "F", mode: "Geometry", view: "All", desc: "Hit F to flip the selected poly. If the poly isn't textured, it's a good idea to have normals on." },
+        { keys: "R + Mouse", mode: "Geometry", view: "All", desc: "Rotate and resize texture" },
+        { keys: "Shift + R + Mouse", mode: "Geometry", view: "All", desc: "Rotate and resize texture in 15 degree increments" },
+        { keys: "END", mode: "Geometry", view: "All", desc: "Deletes the selected poly" },
+        { keys: "DELETE", mode: "Geometry", view: "All", desc: "Deletes the green vertex. Deleting a vertex will most likely screw up your geometry (which is BAD)." },
+        { keys: "INSERT", mode: "Geometry", view: "Perspective", desc: "Inserts a vertex at the center of the green edge" },
+        { keys: "W + Mouse", mode: "Geometry", view: "All", desc: "Insets the selected poly" },
+        { keys: "W + RMB", mode: "Geometry", view: "All", desc: "Same as R, but it scales the polygon. Useful for creating doorways." },
+        { keys: "R + RMB", mode: "Geometry", view: "All", desc: "Hold down R and right-click drag to extrude the red poly. This will delete the original polygon. This is useful for bringing out tunnels or doorways." },
+        { keys: "Q + RMB", mode: "Geometry", view: "All", desc: "Hold down Q and right-click drag to scale the red poly" },
+        { keys: "E + RMB", mode: "Geometry", view: "All", desc: "Hold down E and right-click drag to extrude the red poly" },
+        { keys: "G", mode: "Geometry", view: "All", desc: "Pressing G places the grid along the red polygon" },
+        { keys: "P", mode: "Geometry", view: "Perspective", desc: "Press this to set the focus point to the green point" },
+        { keys: "Ctrl + Spacebar", mode: "Geometry", view: "All", desc: "Hold down CTRL while pressing Spacebar to snap to green vertex. Can split polygons by using this on two points on a polygon." },
+        { keys: "PageDown", mode: "Geometry", view: "All", desc: "Delete face" },
+        { keys: "Arrow Keys", mode: "Geometry", view: "All", desc: "Move UV offset of the texture(s)" },
+        { keys: "Ctrl + Arrow Keys", mode: "Geometry", view: "All", desc: "Scale textures X and Y" },
+        { keys: "Ctrl + Shift + Arrow Keys", mode: "Geometry", view: "All", desc: "Mirror texture" },
+        { keys: "G", mode: "Geometry", view: "Perspective", desc: "Angle grid at surface normal" },
+        { keys: "K", mode: "Geometry", view: "All", desc: "Rotates texture" },
+        { keys: "Home", mode: "Geometry", view: "All", desc: "Remove Edges" }
+    ];
+
+    const gridContainer = document.getElementById('grid-container');
+    const searchInput = document.getElementById('search');
+    const modeFilter = document.getElementById('filter-mode');
+    const viewFilter = document.getElementById('filter-view');
+
+    // Dynamically populate the drop down controls
+    function populateFilters() {
+        const modes = new Set();
+        const views = new Set();
+
+        data.forEach(item => {
+            item.mode.split(',').forEach(m => modes.add(m.trim()));
+            item.view.split(',').forEach(v => views.add(v.trim()));
+        });
+
+        const sortedModes = Array.from(modes).sort().filter(m => m !== 'All');
+        const sortedViews = Array.from(views).sort().filter(v => v !== 'All');
+
+        sortedModes.forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = m;
+            modeFilter.appendChild(opt);
+        });
+
+        sortedViews.forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v;
+            opt.textContent = v;
+            viewFilter.appendChild(opt);
+        });
+    }
+
+    // Helper func to format keys
+    function formatKeys(keyString) {
+        const parts = keyString.split(/(\s\+\s|\s\/\s|,)/);
+		
+        return parts.map(part => {
+            if (part === ' + ' || part === ' / ' || part.trim() === ',') {
+                return `<span style="color:#64748b">${part}</span>`;
+            }
+			
+            if (!part.trim()) return part;
+			
+            return `<kbd>${part.trim()}</kbd>`;
+        }).join('');
+    }
+
+    // Render the Grid
+    function renderGrid(items) {
+        const header = gridContainer.querySelector('.grid-header');
+        gridContainer.innerHTML = '';
+        gridContainer.appendChild(header);
+
+        if (items.length === 0) {
+            const noRes = document.createElement('div');
+            noRes.className = 'no-results';
+            noRes.textContent = 'No shortcuts match your filters.';
+            gridContainer.appendChild(noRes);
+            return;
+        }
+
+        items.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'grid-row';
+
+            const keyCell = document.createElement('div');
+            keyCell.className = 'cell cell-keys';
+            keyCell.innerHTML = formatKeys(item.keys);
+            
+            const modeCell = document.createElement('div');
+            modeCell.className = 'cell';
+            modeCell.innerHTML = item.mode.split(',').map(m => `<span class="tag">${m.trim()}</span>`).join('');
+
+            const viewCell = document.createElement('div');
+            viewCell.className = 'cell';
+            viewCell.innerHTML = item.view === 'All' 
+                ? '<span class="tag view-tag">All Views</span>' 
+                : item.view.split(',').map(v => `<span class="tag view-tag">${v.trim()}</span>`).join('');
+
+            const descCell = document.createElement('div');
+            descCell.className = 'cell cell-desc';
+            descCell.textContent = item.desc;
+
+            row.appendChild(keyCell);
+            row.appendChild(modeCell);
+            row.appendChild(viewCell);
+            row.appendChild(descCell);
+            gridContainer.appendChild(row);
+        });
+    }
+
+    // Filter function
+    function filterData() {
+        const term = searchInput.value.toLowerCase();
+        const selectedMode = modeFilter.value;
+        const selectedView = viewFilter.value;
+
+        const filtered = data.filter(item => {
+            const matchesSearch = item.keys.toLowerCase().includes(term) || 
+			                      item.mode.toLowerCase().includes(term) ||
+								  item.view.toLowerCase().includes(term) ||
+                                  item.desc.toLowerCase().includes(term);
+            const matchesMode = selectedMode === 'All' || item.mode.includes(selectedMode);
+            const matchesView = selectedView === 'All' || item.view.includes(selectedView);
+
+            return matchesSearch && matchesMode && matchesView;
+        });
+
+        renderGrid(filtered);
+    }
+
+    // Initialize everything
+    populateFilters();
+    renderGrid(data);
+
+    searchInput.addEventListener('input', filterData);
+    modeFilter.addEventListener('change', filterData);
+    viewFilter.addEventListener('change', filterData);
+	
+	const themeBtn = document.getElementById('theme-toggle');
+    const htmlEl = document.documentElement;
+	
+	themeBtn.addEventListener('click', () => {
+        const currentTheme = htmlEl.getAttribute('data-theme');
+        
+        if (currentTheme === 'light') {
+            htmlEl.removeAttribute('data-theme');
+            themeBtn.innerHTML = '<span>☀️</span> Switch to Light Mode';
+        } else {
+			// toggle to light mode
+            htmlEl.setAttribute('data-theme', 'light');
+            themeBtn.innerHTML = '<span>🌙</span> Switch to Dark Mode';
+        }
+    });
+
+</script>
+
+</body>
+</html>
